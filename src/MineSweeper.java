@@ -1,16 +1,16 @@
 import javax.swing.*;
 import java.awt.*;
 
-import sweeper.Cell;
-import sweeper.CellPosition;
-import sweeper.Coord;
-import sweeper.GameIcons;
+import sweeper.*;
 
 public class MineSweeper extends JFrame {
 
+    private Game game;
+
     private JPanel panel;
-    private final int COLS = 15; // Столбцы
-    private final int ROWS = 15; // Строки
+    private final int COLS = 10; // Столбцы
+    private final int ROWS = 10; // Строки
+    private final int BOMBS = 10;
     private final int IMG_SIZE = 50;
 
     public static void main(String[] args) {
@@ -20,19 +20,21 @@ public class MineSweeper extends JFrame {
 
     //Всё необходимое для запуска окна
     private MineSweeper(){
-        Coord.setSize(new CellPosition(COLS, ROWS));
+        game = new Game(COLS, ROWS, BOMBS);
+        game.startGame();
         setImages();
         initPanel(); //Инициализация панели
         initFrame(); //Инициализация окна
     }
 
     private void initFrame(){
-        pack();
+
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setTitle("MineSweeper");
         setLocationRelativeTo(null);
         setResizable(false);
         setVisible(true);
+        pack();
     }
 
     private void initPanel(){
@@ -41,7 +43,7 @@ public class MineSweeper extends JFrame {
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
                 for(CellPosition cellPos : Coord.getAllCoords()){
-                    g.drawImage((Image) GameIcons.FLAGED.image, cellPos.x * IMG_SIZE, cellPos.y * IMG_SIZE, this);
+                    g.drawImage((Image) game.getCell(cellPos).image, cellPos.x * IMG_SIZE, cellPos.y * IMG_SIZE, this);
                 }
             }
         };
@@ -56,7 +58,7 @@ public class MineSweeper extends JFrame {
     }
 
     private void setImages(){
-        for (GameIcons gameIcon : GameIcons.values()){
+        for (CellState gameIcon : CellState.values()){
             gameIcon.image = getImage(gameIcon.name().toLowerCase());
         }
     }

@@ -1,6 +1,6 @@
 package sweeper;
 
-public enum GameIcons {
+public enum CellState {
     ZERO,
     NUM1,
     NUM2,
@@ -19,9 +19,9 @@ public enum GameIcons {
 
     public Object image;
 
-    GameIcons getNextNumber ()
+    CellState getNextNumber ()
     {
-        return GameIcons.values() [this.ordinal() + 1];
+        return CellState.values() [this.ordinal() + 1];
     }
 
     int getNumber ()
