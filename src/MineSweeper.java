@@ -1,5 +1,9 @@
 import javax.swing.*;
 import java.awt.*;
+
+import sweeper.Cell;
+import sweeper.CellPosition;
+import sweeper.Coord;
 import sweeper.GameIcons;
 
 public class MineSweeper extends JFrame {
@@ -16,6 +20,7 @@ public class MineSweeper extends JFrame {
 
     //Всё необходимое для запуска окна
     private MineSweeper(){
+        Coord.setSize(new CellPosition(COLS, ROWS));
         setImages();
         initPanel(); //Инициализация панели
         initFrame(); //Инициализация окна
@@ -35,12 +40,12 @@ public class MineSweeper extends JFrame {
             @Override
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
-                for (GameIcons gameIcon : GameIcons.values()){
-                    g.drawImage((Image)gameIcon.image,gameIcon.ordinal()*IMG_SIZE,0, this);
+                for(CellPosition cellPos : Coord.getAllCoords()){
+                    g.drawImage((Image) GameIcons.FLAGED.image, cellPos.x * IMG_SIZE, cellPos.y * IMG_SIZE, this);
                 }
             }
         };
-        panel.setPreferredSize(new Dimension(COLS*IMG_SIZE,ROWS*IMG_SIZE));
+        panel.setPreferredSize(new Dimension(Coord.getSize().x * IMG_SIZE,Coord.getSize().y * IMG_SIZE));
         add(panel);
     }
 
