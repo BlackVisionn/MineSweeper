@@ -3,7 +3,12 @@ package sweeper;
 public class Game {
 
     private GameField gameField;
+    private GameState gameState;
 
+    public GameState getGameState(){
+
+        return gameState;
+    }
 
     public Game (int cols, int rows, int bombs){
         Coord.setSize(new CellPosition(cols, rows));
@@ -12,6 +17,7 @@ public class Game {
 
     public void startGame(){
         gameField.createField();
+        gameState = GameState.PLAY;
     }
 
     public CellState getCell(CellPosition cellPos){
@@ -27,10 +33,20 @@ public class Game {
 
     public void pressedLeftButton(CellPosition cellPos) {
 
-        gameField.setOpenedToCell(cellPos);
+        gameField.openCell(cellPos);
+        checkWinner();
     }
 
     public void pressedRightButton(CellPosition cellPos) {
         gameField.setFlagToCell(cellPos);
+    }
+
+    private void checkWinner(){
+
+        if(gameState == GameState.PLAY){
+            if(gameField.getClosedCellsCount() == gameField.getTotalBombs()){
+                gameState = GameState.WIN;
+            }
+        }
     }
 }

@@ -40,7 +40,7 @@ public class Coord
         return new CellPosition(random.nextInt(size.x), random.nextInt(size.y));
     }
 
-    public static ArrayList<CellPosition> getCellPositionsArround (CellPosition cellPos)
+    public static ArrayList<CellPosition> getCellPositionsAround (CellPosition cellPos)
     {
         CellPosition around;
         ArrayList<CellPosition> list = new ArrayList<CellPosition>();
@@ -51,6 +51,4 @@ public class Coord
                         list.add(around);
         return list;
     }
-
-
 }

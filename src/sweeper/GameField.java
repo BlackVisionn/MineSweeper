@@ -5,6 +5,7 @@ public class GameField {
     private Cell closedCell;
     private int totalBombs;
     private int totalFlags;
+    private int closedCellsCount;
 
     GameField (int totalBombs){
         this.totalBombs = totalBombs;
@@ -15,6 +16,7 @@ public class GameField {
     void createField(){
         bombCell = new Cell(CellState.ZERO);
         closedCell = new Cell(CellState.CLOSED);
+        closedCellsCount = Coord.getSize().x * Coord.getSize().y;
         for (int i = 0; i<totalBombs; i++){
             placeBomb();
         }
@@ -40,7 +42,7 @@ public class GameField {
     }
 
     private void incNumbersAroundBomb(CellPosition cellPos){
-        for (CellPosition aroundPos : Coord.getCellPositionsArround(cellPos)){
+        for (CellPosition aroundPos : Coord.getCellPositionsAround(cellPos)){
             if (CellState.BOMB != bombCell.getCellState(aroundPos)){
                 bombCell.setCellState(aroundPos, bombCell.getCellState(aroundPos).getNextNumber());
             }
@@ -59,9 +61,46 @@ public class GameField {
 
     public void setOpenedToCell(CellPosition cellPos) {
         closedCell.setCellState(cellPos, CellState.OPENED);
+        closedCellsCount--;
     }
 
     public void setFlagToCell(CellPosition cellPos) {
-        closedCell.setCellState(cellPos, CellState.FLAGED);
+
+        switch (closedCell.getCellState(cellPos)){
+
+            case FLAGED : closedCell.setCellState(cellPos, CellState.CLOSED);
+            case CLOSED : closedCell.setCellState(cellPos, CellState.FLAGED);
+        }
+    }
+
+    public void openCell (CellPosition cellPos){
+
+        switch (getClosedCellState(cellPos)){
+            case OPENED : return;
+            case FLAGED : return;
+            case CLOSED : switch (getBombCellState(cellPos)){
+                case ZERO : openCellsAround(cellPos);
+                case BOMB : return;
+                default : setOpenedToCell(cellPos);
+            }
+        }
+    }
+
+    private void openCellsAround(CellPosition cellPos){
+
+        setOpenedToCell(cellPos);
+        for(CellPosition aroundPos : Coord.getCellPositionsAround(cellPos)){
+            openCell(aroundPos);
+        }
+    }
+
+    public int getTotalBombs() {
+
+        return totalBombs;
+    }
+
+    public int getClosedCellsCount() {
+
+        return closedCellsCount;
     }
 }
