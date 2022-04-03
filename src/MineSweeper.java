@@ -8,8 +8,8 @@ public class MineSweeper extends JFrame {
     private Game game;
 
     private JPanel panel;
-    private final int COLS = 10; // Столбцы
-    private final int ROWS = 10; // Строки
+    private final int COLS = 9; // Столбцы
+    private final int ROWS = 9; // Строки
     private final int BOMBS = 10;
     private final int IMG_SIZE = 50;
 
@@ -58,8 +58,8 @@ public class MineSweeper extends JFrame {
     }
 
     private void setImages(){
-        for (CellState gameIcon : CellState.values()){
-            gameIcon.image = getImage(gameIcon.name().toLowerCase());
+        for (CellState cellState : CellState.values()){
+            cellState.image = getImage(cellState.name().toLowerCase());
         }
     }
 }
