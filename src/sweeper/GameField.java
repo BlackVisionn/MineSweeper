@@ -78,7 +78,7 @@ public class GameField {
     public void openCell (CellPosition cellPos){
 
         switch (getClosedCellState(cellPos)){
-            case OPENED : return;
+            case OPENED : openClosedCellsAroundNumber(cellPos); return;
             case FLAGED : return;
             case CLOSED : switch (getBombCellState(cellPos)){
                 case ZERO : openCellsAround(cellPos); return;
@@ -121,6 +121,25 @@ public class GameField {
                 // поставить нету бомбы на ячейке с флажком
                 if (closedCell.getCellState(otherPos) == CellState.FLAGED){
                     closedCell.setCellState(otherPos, CellState.NOBOMB);
+                }
+            }
+        }
+    }
+
+    private void openClosedCellsAroundNumber (CellPosition cellPos){
+
+        if(bombCell.getCellState(cellPos) != CellState.BOMB){
+            int count = 0;
+            for (CellPosition aroundPos : Coord.getCellPositionsAround(cellPos)){
+                if(closedCell.getCellState(aroundPos) == CellState.FLAGED){
+                    count++;
+                }
+            }
+            if (count == bombCell.getCellState(cellPos).getNumber()){
+                for (CellPosition aroundPos : Coord.getCellPositionsAround(cellPos)){
+                    if(closedCell.getCellState(aroundPos) == CellState.CLOSED){
+                        openCell(aroundPos);
+                    }
                 }
             }
         }
