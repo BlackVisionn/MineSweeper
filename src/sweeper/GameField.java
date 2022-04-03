@@ -4,13 +4,15 @@ public class GameField {
     private Cell bombCell;
     private Cell closedCell;
     private int totalBombs;
-    private int totalFlags;
+    private int health;
+    private int placedFlags;
     private int closedCellsCount;
     private GameState gameState;
 
-    GameField (int totalBombs){
+
+    GameField (int totalBombs, int health){
         this.totalBombs = totalBombs;
-        totalFlags = totalBombs;
+        this.health = health;
         fixBombsCount();
     }
 
@@ -70,8 +72,20 @@ public class GameField {
 
         switch (closedCell.getCellState(cellPos)){
 
-            case FLAGED : closedCell.setCellState(cellPos, CellState.CLOSED);
-            case CLOSED : closedCell.setCellState(cellPos, CellState.FLAGED);
+            case FLAGED : {
+                placedFlags--;
+                closedCell.setCellState(cellPos, CellState.CLOSED);
+                System.out.println(placedFlags);
+                return;
+            }
+            case CLOSED : {
+                if(placedFlags < totalBombs){
+                    placedFlags++;
+                    closedCell.setCellState(cellPos, CellState.FLAGED);
+                    System.out.println(placedFlags);
+                }
+                return;
+            }
         }
     }
 
@@ -79,7 +93,7 @@ public class GameField {
 
         switch (getClosedCellState(cellPos)){
             case OPENED : openClosedCellsAroundNumber(cellPos); return;
-            case FLAGED : return;
+            //case FLAGED : return;
             case CLOSED : switch (getBombCellState(cellPos)){
                 case ZERO : openCellsAround(cellPos); return;
                 case BOMB : openBombs(cellPos); return;
@@ -96,6 +110,10 @@ public class GameField {
         }
     }
 
+    public int getPlacedFlagsCount(){
+        return placedFlags;
+    }
+
     public int getTotalBombs() {
 
         return totalBombs;
@@ -108,19 +126,27 @@ public class GameField {
 
     private void openBombs(CellPosition cellPos){
 
-        gameState = GameState.BOMBED;
-        closedCell.setCellState(cellPos, CellState.BOMBED);
-        for (CellPosition otherPos : Coord.getAllCoords()){
-            if(getBombCellState(otherPos) == CellState.BOMB){
-                // открыть клетку с закрытой бомбой
-                if(closedCell.getCellState(otherPos) == CellState.CLOSED){
-                    closedCell.setCellState(otherPos, CellState.OPENED);
+        health--;
+        if (health > 0){
+            gameState = GameState.BOMBED;
+            closedCell.setCellState(cellPos, CellState.BOMBED);
+            System.out.println(health);
+        }
+        else {
+            gameState = GameState.LOSE;
+            closedCell.setCellState(cellPos, CellState.BOMBED);
+            for (CellPosition otherPos : Coord.getAllCoords()){
+                if(getBombCellState(otherPos) == CellState.BOMB){
+                    // открыть клетку с закрытой бомбой
+                    if(closedCell.getCellState(otherPos) == CellState.CLOSED){
+                        closedCell.setCellState(otherPos, CellState.OPENED);
+                    }
                 }
-            }
-            else {
-                // поставить нету бомбы на ячейке с флажком
-                if (closedCell.getCellState(otherPos) == CellState.FLAGED){
-                    closedCell.setCellState(otherPos, CellState.NOBOMB);
+                else {
+                    // поставить нету бомбы на ячейке с флажком
+                    if (closedCell.getCellState(otherPos) == CellState.FLAGED){
+                        closedCell.setCellState(otherPos, CellState.NOBOMB);
+                    }
                 }
             }
         }

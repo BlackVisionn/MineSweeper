@@ -2,7 +2,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-
 import sweeper.*;
 
 public class MineSweeper extends JFrame {
@@ -13,6 +12,7 @@ public class MineSweeper extends JFrame {
     private final int COLS = 9; // Столбцы
     private final int ROWS = 9; // Строки
     private final int BOMBS = 10;
+    private final int HEALTH = 3;
     private final int IMG_SIZE = 50;
 
     public static void main(String[] args) {
@@ -22,7 +22,7 @@ public class MineSweeper extends JFrame {
 
     //Всё необходимое для запуска окна
     private MineSweeper(){
-        game = new Game(COLS, ROWS, BOMBS);
+        game = new Game(COLS, ROWS, BOMBS, HEALTH);
         game.startGame();
         setImages();
         initPanel(); //Инициализация панели
@@ -33,10 +33,11 @@ public class MineSweeper extends JFrame {
 
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setTitle("MineSweeper");
-        setLocationRelativeTo(null);
+        setIconImage(getImage("icon"));
         setResizable(false);
         setVisible(true);
         pack();
+        setLocationRelativeTo(null);
     }
 
     private void initPanel(){
@@ -63,9 +64,13 @@ public class MineSweeper extends JFrame {
                     game.pressedRightButton(cellPos);
                 }
                 panel.repaint();
+
+                if(game.getGameState() != GameState.PLAY && game.getGameState() != GameState.BOMBED){
+                    JOptionPane.showMessageDialog(null, game.isWin() ? "Победа" : "Поражение");
+                    System.exit(0);
+                }
             }
         });
-
 
         panel.setPreferredSize(new Dimension(Coord.getSize().x * IMG_SIZE,Coord.getSize().y * IMG_SIZE));
         add(panel);

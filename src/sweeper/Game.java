@@ -10,9 +10,9 @@ public class Game {
         return gameState;
     }
 
-    public Game (int cols, int rows, int bombs){
+    public Game (int cols, int rows, int bombs, int health){
         Coord.setSize(new CellPosition(cols, rows));
-        gameField = new GameField(bombs);
+        gameField = new GameField(bombs, health);
     }
 
     public void startGame(){
@@ -36,19 +36,20 @@ public class Game {
         if (gameOver()) return;
         gameField.openCell(cellPos);
         gameState = gameField.getGameState();
-        checkWinner();
+
     }
 
     public void pressedRightButton(CellPosition cellPos) {
 
         if (gameOver()) return;
         gameField.setFlagToCell(cellPos);
+        checkWinner();
     }
 
     private void checkWinner(){
 
         if(gameState == GameState.PLAY){
-            if(gameField.getClosedCellsCount() == gameField.getTotalBombs()){
+            if(gameField.getClosedCellsCount() == gameField.getTotalBombs() && gameField.getTotalBombs() == gameField.getPlacedFlagsCount()){
                 gameState = GameState.WIN;
                 System.out.print("Победа!");
             }
@@ -58,11 +59,14 @@ public class Game {
         }
     }
     private boolean gameOver(){
-        if (gameState == GameState.PLAY){
+        if (gameState == GameState.PLAY || gameState == GameState.BOMBED){
             return false;
         }
         startGame();
         return true;
+    }
 
+    public boolean isWin(){
+        return gameState == GameState.WIN;
     }
 }
