@@ -1,5 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 import sweeper.*;
 
@@ -47,6 +49,24 @@ public class MineSweeper extends JFrame {
                 }
             }
         };
+
+        panel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                int x = e.getX() / IMG_SIZE;
+                int y = e.getY() / IMG_SIZE;
+                CellPosition cellPos = new CellPosition(x, y);
+                if (e.getButton() == MouseEvent.BUTTON1){
+                    game.pressedLeftButton(cellPos);
+                }
+                if (e.getButton() == MouseEvent.BUTTON3){
+                    game.pressedRightButton(cellPos);
+                }
+                panel.repaint();
+            }
+        });
+
+
         panel.setPreferredSize(new Dimension(Coord.getSize().x * IMG_SIZE,Coord.getSize().y * IMG_SIZE));
         add(panel);
     }

@@ -1,16 +1,20 @@
 package sweeper;
 // нужно поставить private
 public class GameField {
-    private Cell cell;
+    private Cell bombCell;
+    private Cell closedCell;
     private int totalBombs;
+    private int totalFlags;
 
     GameField (int totalBombs){
         this.totalBombs = totalBombs;
+        totalFlags = totalBombs;
         fixBombsCount();
     }
 
     void createField(){
-        cell = new Cell(CellState.ZERO);
+        bombCell = new Cell(CellState.ZERO);
+        closedCell = new Cell(CellState.CLOSED);
         for (int i = 0; i<totalBombs; i++){
             placeBomb();
         }
@@ -19,10 +23,10 @@ public class GameField {
     private void placeBomb(){
         while (true){
             CellPosition cellPos = Coord.getRandomCellPos();
-            if(cell.getCellState(cellPos) == CellState.BOMB){
+            if(bombCell.getCellState(cellPos) == CellState.BOMB){
                 continue;
             }
-            cell.setCellState(cellPos, CellState.BOMB);
+            bombCell.setCellState(cellPos, CellState.BOMB);
             incNumbersAroundBomb(cellPos);
             break;
         }
@@ -37,14 +41,27 @@ public class GameField {
 
     private void incNumbersAroundBomb(CellPosition cellPos){
         for (CellPosition aroundPos : Coord.getCellPositionsArround(cellPos)){
-            if (CellState.BOMB != cell.getCellState(aroundPos)){
-                cell.setCellState(aroundPos, cell.getCellState(aroundPos).getNextNumber());
+            if (CellState.BOMB != bombCell.getCellState(aroundPos)){
+                bombCell.setCellState(aroundPos, bombCell.getCellState(aroundPos).getNextNumber());
             }
         }
     }
 
-    CellState get (CellPosition cellPos){
-        return cell.getCellState(cellPos);
+    CellState getBombCellState (CellPosition cellPos){
+
+        return bombCell.getCellState(cellPos);
     }
 
+    CellState getClosedCellState (CellPosition cellPos){
+        return closedCell.getCellState(cellPos);
+    }
+
+
+    public void setOpenedToCell(CellPosition cellPos) {
+        closedCell.setCellState(cellPos, CellState.OPENED);
+    }
+
+    public void setFlagToCell(CellPosition cellPos) {
+        closedCell.setCellState(cellPos, CellState.FLAGED);
+    }
 }
