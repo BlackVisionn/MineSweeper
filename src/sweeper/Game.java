@@ -16,8 +16,8 @@ public class Game {
     }
 
     public void startGame(){
-        gameField.createField();
         gameState = GameState.PLAY;
+        gameField.createField();
     }
 
     public CellState getCell(CellPosition cellPos){
@@ -33,11 +33,15 @@ public class Game {
 
     public void pressedLeftButton(CellPosition cellPos) {
 
+        if (gameOver()) return;
         gameField.openCell(cellPos);
+        gameState = gameField.getGameState();
         checkWinner();
     }
 
     public void pressedRightButton(CellPosition cellPos) {
+
+        if (gameOver()) return;
         gameField.setFlagToCell(cellPos);
     }
 
@@ -46,7 +50,19 @@ public class Game {
         if(gameState == GameState.PLAY){
             if(gameField.getClosedCellsCount() == gameField.getTotalBombs()){
                 gameState = GameState.WIN;
+                System.out.print("Победа!");
             }
         }
+        if(gameState == GameState.BOMBED){
+            System.out.print("Проиграл!");
+        }
+    }
+    private boolean gameOver(){
+        if (gameState == GameState.PLAY){
+            return false;
+        }
+        startGame();
+        return true;
+
     }
 }

@@ -6,6 +6,7 @@ public class GameField {
     private int totalBombs;
     private int totalFlags;
     private int closedCellsCount;
+    private GameState gameState;
 
     GameField (int totalBombs){
         this.totalBombs = totalBombs;
@@ -14,6 +15,7 @@ public class GameField {
     }
 
     void createField(){
+        gameState = GameState.PLAY;
         bombCell = new Cell(CellState.ZERO);
         closedCell = new Cell(CellState.CLOSED);
         closedCellsCount = Coord.getSize().x * Coord.getSize().y;
@@ -79,9 +81,9 @@ public class GameField {
             case OPENED : return;
             case FLAGED : return;
             case CLOSED : switch (getBombCellState(cellPos)){
-                case ZERO : openCellsAround(cellPos);
-                case BOMB : return;
-                default : setOpenedToCell(cellPos);
+                case ZERO : openCellsAround(cellPos); return;
+                case BOMB : openBombs(cellPos); return;
+                default : setOpenedToCell(cellPos); return;
             }
         }
     }
@@ -102,5 +104,29 @@ public class GameField {
     public int getClosedCellsCount() {
 
         return closedCellsCount;
+    }
+
+    private void openBombs(CellPosition cellPos){
+
+        gameState = GameState.BOMBED;
+        closedCell.setCellState(cellPos, CellState.BOMBED);
+        for (CellPosition otherPos : Coord.getAllCoords()){
+            if(getBombCellState(otherPos) == CellState.BOMB){
+                // открыть клетку с закрытой бомбой
+                if(closedCell.getCellState(otherPos) == CellState.CLOSED){
+                    closedCell.setCellState(otherPos, CellState.OPENED);
+                }
+            }
+            else {
+                // поставить нету бомбы на ячейке с флажком
+                if (closedCell.getCellState(otherPos) == CellState.FLAGED){
+                    closedCell.setCellState(otherPos, CellState.NOBOMB);
+                }
+            }
+        }
+    }
+
+    public GameState getGameState(){
+        return gameState;
     }
 }
