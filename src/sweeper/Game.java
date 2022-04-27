@@ -4,66 +4,57 @@ public class Game {
 
     private GameField gameField;
     private GameState gameState;
+    private Cell cell;
+    private int health;
 
-    public GameState getGameState(){
-
-        return gameState;
-    }
 
     public Game (int cols, int rows, int bombs, int health){
         Coord.setSize(new CellPosition(cols, rows));
-        gameField = new GameField(bombs, health);
+        this.health = health;
+        gameField = new GameField(bombs);
+        cell = new Cell(CellState.CLOSED);
     }
 
+    // Начало игры
     public void startGame(){
         gameState = GameState.PLAY;
         gameField.createField();
+        cell.getCells(gameField, cell, health);
     }
 
-    public CellState getCell(CellPosition cellPos){
+    // Получить состояние ячейки нужного уровня
+    public CellState getCurrentCellState(CellPosition cellPos){
 
-        if(gameField.getClosedCellState(cellPos) == CellState.OPENED){
+        if(cell.getCellState(cellPos) == CellState.OPENED){
             return gameField.getBombCellState(cellPos);
         }
         else {
-            return gameField.getClosedCellState(cellPos);
+            return cell.getCellState(cellPos);
         }
-
     }
 
     public void pressedLeftButton(CellPosition cellPos) {
-
-        if (gameOver()) return;
-        gameField.openCell(cellPos);
-        gameState = gameField.getGameState();
-
+        cell.openCell(cellPos);
+        gameState = cell.getGameState();
     }
 
     public void pressedRightButton(CellPosition cellPos) {
-
-        if (gameOver()) return;
-        gameField.setFlagToCell(cellPos);
+        cell.setFlagToCell(cellPos);
         checkWinner();
     }
 
+    public GameState getGameState(){
+        return gameState;
+    }
+
+    // Проверка на победу
     private void checkWinner(){
 
-        if(gameState == GameState.PLAY){
-            if(gameField.getClosedCellsCount() == gameField.getTotalBombs() && gameField.getTotalBombs() == gameField.getPlacedFlagsCount()){
+        if(gameState == GameState.PLAY || gameState == GameState.BOMBED){
+            if(cell.getClosedCellsCount() == cell.getTotalBombs() && cell.getTotalBombs() == cell.getPlacedFlagsCount()){
                 gameState = GameState.WIN;
-                System.out.print("Победа!");
             }
         }
-        if(gameState == GameState.BOMBED){
-            System.out.print("Проиграл!");
-        }
-    }
-    private boolean gameOver(){
-        if (gameState == GameState.PLAY || gameState == GameState.BOMBED){
-            return false;
-        }
-        startGame();
-        return true;
     }
 
     public boolean isWin(){

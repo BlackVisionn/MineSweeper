@@ -9,9 +9,10 @@ public class MineSweeper extends JFrame {
     private Game game;
 
     private JPanel panel;
+    private JLabel label;
     private final int COLS = 9; // Столбцы
     private final int ROWS = 9; // Строки
-    private final int BOMBS = 10;
+    private final int BOMBS = 3;
     private final int HEALTH = 3;
     private final int IMG_SIZE = 50;
 
@@ -25,6 +26,7 @@ public class MineSweeper extends JFrame {
         game = new Game(COLS, ROWS, BOMBS, HEALTH);
         game.startGame();
         setImages();
+        initLabel();
         initPanel(); //Инициализация панели
         initFrame(); //Инициализация окна
     }
@@ -40,13 +42,19 @@ public class MineSweeper extends JFrame {
         setLocationRelativeTo(null);
     }
 
+    private void initLabel(){
+        label = new JLabel("Осталось жизней:" + BOMBS + " Осталось флагов:" + BOMBS);
+        add(label, BorderLayout.NORTH);
+    }
+
     private void initPanel(){
         panel = new JPanel(){
             @Override
             protected void paintComponent(Graphics g) {
+
                 super.paintComponent(g);
                 for(CellPosition cellPos : Coord.getAllCoords()){
-                    g.drawImage((Image) game.getCell(cellPos).image, cellPos.x * IMG_SIZE, cellPos.y * IMG_SIZE, this);
+                    g.drawImage((Image) game.getCurrentCellState(cellPos).image, cellPos.x * IMG_SIZE, cellPos.y * IMG_SIZE, this);
                 }
             }
         };
