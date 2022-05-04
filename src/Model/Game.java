@@ -21,39 +21,8 @@ public class Game {
         gameField.createField();
         cell.getCells(gameField, cell, health);
     }
-
-    // Получить состояние ячейки нужного уровня
-    public CellState getCurrentCellState(CellPosition cellPos){
-
-        if(cell.getCellState(cellPos) == CellState.OPENED){
-            return gameField.getBombCellState(cellPos);
-        }
-        else {
-            return cell.getCellState(cellPos);
-        }
-    }
-
-    public void pressedLeftButton(CellPosition cellPos) {
-        cell.openCell(cellPos);
-        gameState = cell.getGameState();
-        checkWinner();
-    }
-
-    public void pressedRightButton(CellPosition cellPos) {
-        cell.setFlagToCell(cellPos);
-        checkWinner();
-    }
-
-    public GameState getGameState(){
-        return gameState;
-    }
-
-    public Cell getCell(){
-        return cell;
-    }
-
     // Проверка на победу
-    private void checkWinner(){
+    void checkWinner(){
 
         if(gameState == GameState.PLAY || gameState == GameState.BOMBED){
             if(cell.getClosedCellsCount() == cell.getBomb().getTotalBombs() && cell.getBomb().getTotalBombs() == cell.getPlacedFlagsCount()){
@@ -64,5 +33,17 @@ public class Game {
 
     public boolean isWin(){
         return gameState == GameState.WIN;
+    }
+
+    public GameState getGameState(){
+        return gameState;
+    }
+
+    public Cell getCell(){
+        return cell;
+    }
+
+    public GameField getGameField(){
+        return gameField;
     }
 }

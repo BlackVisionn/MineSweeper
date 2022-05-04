@@ -8,19 +8,20 @@ import java.awt.*;
 public class CellWidget extends JPanel {
 
     private final int CELL_SIZE = 50;
-    private Game _game;
+    //private Game _game;
+    private GameControl _gameControl;
 
-    public CellWidget(Game game){
+    public CellWidget(GameControl gameControl){
 
         setPreferredSize(new Dimension(Coord.getSize().x * CELL_SIZE, Coord.getSize().y * CELL_SIZE));
-        _game = game;
+        _gameControl = gameControl;
     }
 
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         for(CellPosition cellPos : Coord.getAllCoords()){
-            g.drawImage((Image) _game.getCurrentCellState(cellPos).image, cellPos.x * CELL_SIZE, cellPos.y * CELL_SIZE, this);
+            g.drawImage((Image) _gameControl.getCurrentCellState(cellPos).image, cellPos.x * CELL_SIZE, cellPos.y * CELL_SIZE, this);
         }
     }
 }

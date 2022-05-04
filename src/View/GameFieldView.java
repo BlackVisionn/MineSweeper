@@ -12,16 +12,18 @@ public class GameFieldView extends JPanel {
     private JLabel label;
     private final int IMG_SIZE = 50;
     private Game _game;
+    private GameControl gameControl;
 
 
     public GameFieldView(Game game){
         _game = game;
+        gameControl = new GameControl(_game);
         setImages();
         setLayout(new BorderLayout());
-        label = new JLabel("Осталось жизней: " + game.getCell().getBomb().getHealth() + " Осталось флагов: " + game.getCell().getRemainingFlagsCount());
+        label = new JLabel("Осталось жизней: " + _game.getCell().getBomb().getHealth() + " Осталось флагов: " + _game.getCell().getRemainingFlagsCount());
         add(label, BorderLayout.NORTH);
 
-        add(new CellWidget(game));
+        add(new CellWidget(gameControl));
 
         addMouseListener(new MouseAdapter() {
             @Override
@@ -30,10 +32,10 @@ public class GameFieldView extends JPanel {
                 int y = e.getY() / IMG_SIZE;
                 CellPosition cellPos = new CellPosition(x, y);
                 if (e.getButton() == MouseEvent.BUTTON1){
-                    _game.pressedLeftButton(cellPos);
+                    gameControl.pressedLeftButton(cellPos);
                 }
                 if (e.getButton() == MouseEvent.BUTTON3){
-                    _game.pressedRightButton(cellPos);
+                    gameControl.pressedRightButton(cellPos);
                 }
 
                 label.setText(message());
