@@ -17,11 +17,6 @@ public class GameFrame extends JFrame {
         game = new Game(COLS, ROWS, BOMBS, HEALTH);
         game.startGame();
         GameFieldView mainBox = new GameFieldView(game);
-        initFrame(mainBox); //Инициализация окна
-    }
-
-    private void initFrame(GameFieldView mainBox){
-
         setContentPane(mainBox);
         setResizable(false);
         setFocusable(true);
@@ -37,6 +32,5 @@ public class GameFrame extends JFrame {
         ImageIcon icon = new ImageIcon(getClass().getResource(fileName));
         return icon.getImage();
     }
-
 
 }

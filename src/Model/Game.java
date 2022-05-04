@@ -36,6 +36,7 @@ public class Game {
     public void pressedLeftButton(CellPosition cellPos) {
         cell.openCell(cellPos);
         gameState = cell.getGameState();
+        checkWinner();
     }
 
     public void pressedRightButton(CellPosition cellPos) {
