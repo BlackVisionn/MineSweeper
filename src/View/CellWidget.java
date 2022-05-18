@@ -21,7 +21,18 @@ public class CellWidget extends JPanel {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         for(CellPosition cellPos : Coord.getAllCoords()){
-            g.drawImage((Image) _gameControl.getCurrentCellState(cellPos).image, cellPos.x * CELL_SIZE, cellPos.y * CELL_SIZE, this);
+            UnitWidget uw = new UnitWidget(g,cellPos);
+            if(_gameControl.getCurrentCellState(cellPos) == CellState.BOMB){
+                uw = new BombWidget(g, cellPos);
+            }
+            if(_gameControl.getCurrentCellState(cellPos) == CellState.WALL){
+                uw = new WallWidget(g, cellPos);
+            }
+            else {
+                g.drawImage((Image) _gameControl.getCurrentCellState(cellPos).image, cellPos.x * CELL_SIZE, cellPos.y * CELL_SIZE, this);
+            }
+            this.add(uw);
+
         }
     }
 }
