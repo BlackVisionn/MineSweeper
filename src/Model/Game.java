@@ -7,11 +7,10 @@ public class Game {
     private Cell cell;
     private int health;
 
-
-    public Game (int cols, int rows, int bombs, int health){
+    public Game (int cols, int rows, int bombs, int health, int walls){
         Coord.setSize(new CellPosition(cols, rows));
         this.health = health;
-        gameField = new GameField(bombs);
+        gameField = new GameField(bombs, walls);
         cell = new Cell(CellState.CLOSED);
     }
 
@@ -24,6 +23,7 @@ public class Game {
     // Проверка на победу
     void checkWinner(){
 
+        gameState = cell.getGameState();
         if(gameState == GameState.PLAY || gameState == GameState.BOMBED){
             if(cell.getClosedCellsCount() == cell.getBomb().getTotalBombs() && cell.getBomb().getTotalBombs() == cell.getPlacedFlagsCount()){
                 gameState = GameState.WIN;

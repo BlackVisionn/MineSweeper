@@ -1,7 +1,5 @@
 package Model;
-
 import java.awt.*;
-
 public class GameControl {
 
     private Game _game;
@@ -12,7 +10,6 @@ public class GameControl {
 
     public void pressedLeftButton(CellPosition cellPos) {
         _game.getCell().openCell(cellPos);
-        _game.getCell().getGameState();
         _game.checkWinner();
     }
 
@@ -31,6 +28,4 @@ public class GameControl {
             return _game.getCell().getCellState(cellPos);
         }
     }
-
-
 }

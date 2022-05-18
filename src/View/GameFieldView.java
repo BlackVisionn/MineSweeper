@@ -8,7 +8,6 @@ import java.awt.event.MouseEvent;
 
 public class GameFieldView extends JPanel {
 
-    //private JPanel panel;
     private JLabel label;
     private final int IMG_SIZE = 50;
     private Game _game;

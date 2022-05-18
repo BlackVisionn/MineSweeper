@@ -8,10 +8,11 @@ public class Cell {
     private int placedFlags;
     private int remainingFlagsCount;
     private Bomb bomb;
+    private Wall wall;
 
     private CellState [] [] cellStatesMap;
 
-    ///СОСТОЯНИЯ ЯЧЕЙКИ
+    // Состояния ячейки
     Cell (CellState cellState){
         cellStatesMap = new CellState[Coord.getSize().x][Coord.getSize().y];
         for (CellPosition cellPos : Coord.getAllCoords()){
@@ -25,6 +26,7 @@ public class Cell {
         closedCellsCount = Coord.getSize().x * Coord.getSize().y;
         remainingFlagsCount = gameField.getTotalBombs();
         bomb = new Bomb(gameField.getTotalBombs(), closedCell, gameField.getBombCell(), health);
+        wall = new Wall(closedCell, gameField.getDirection());
     }
 
     // Открыть ячейку
@@ -35,6 +37,7 @@ public class Cell {
             case FLAGED : return;
             case CLOSED : switch (gameField.getBombCellState(cellPos)){
                 case ZERO : openCellsAround(cellPos); return;
+                case WALL : wall.openWall(cellPos); return;
                 case BOMB : closedCellsCount = bomb.explose(cellPos, closedCellsCount);
                     remainingFlagsCount = bomb.getTotalBombs(); return;
                 default : setOpenedToCell(cellPos); return;

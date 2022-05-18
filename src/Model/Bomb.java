@@ -28,12 +28,11 @@ public class Bomb {
             gameState = GameState.LOSE;
             closedCell.setCellState(cellPos, CellState.BOMBED);
             for (CellPosition otherPos : Coord.getAllCoords()){
-                if(bombCell.getCellState(otherPos) == CellState.BOMB){
-                    // открыть клетку с закрытой бомбой
-                    if(closedCell.getCellState(otherPos) == CellState.CLOSED){
-                        closedCell.setCellState(otherPos, CellState.OPENED);
-                    }
+                // Открыть ячейку с закрытой бомбой
+                if(closedCell.getCellState(otherPos) == CellState.CLOSED && bombCell.getCellState(otherPos) == CellState.BOMB){
+                    closedCell.setCellState(otherPos,CellState.OPENED);
                 }
+
                 else {
                     // поставить нету бомбы на ячейке с флажком
                     if (closedCell.getCellState(otherPos) == CellState.FLAGED){

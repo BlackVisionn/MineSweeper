@@ -11,6 +11,8 @@ public enum CellState {
     NUM7,
     NUM8,
     BOMB,
+    WALL,
+    BLOCKED,
     OPENED,
     CLOSED,
     FLAGED,
