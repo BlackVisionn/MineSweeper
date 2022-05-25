@@ -7,7 +7,7 @@ public class Bomb {
     private Cell bombCell;
     private GameState gameState;
 
-    Bomb (int totalBombs, Cell closedCell, Cell bombCell, int health){
+    public Bomb(int totalBombs, Cell closedCell, Cell bombCell, int health){
         this.totalBombs = totalBombs;
         this.closedCell = closedCell;
         this.bombCell = bombCell;

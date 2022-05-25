@@ -7,15 +7,16 @@ import java.awt.*;
 public class GameFrame extends JFrame {
 
     private Game game;
-    private final int COLS = 9; // Столбцы
-    private final int ROWS = 9; // Строки
-    private final int BOMBS = 10;
+    private final int COLS = 4; // Столбцы
+    private final int ROWS = 4; // Строки
+    private final int BOMBS = 0;
     private final int WALLS = 1;
-    private final int HEALTH = 3;
+    private final int HEALTH = 1;
 
     public GameFrame(){
 
-        game = new Game(COLS, ROWS, BOMBS, HEALTH, WALLS);
+        Coord.setSize(new CellPosition(COLS, ROWS));
+        game = new Game(BOMBS, HEALTH, WALLS);
         game.startGame();
         GameFieldView mainBox = new GameFieldView(game);
         setContentPane(mainBox);

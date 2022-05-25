@@ -7,8 +7,7 @@ public class Game {
     private Cell cell;
     private int health;
 
-    public Game (int cols, int rows, int bombs, int health, int walls){
-        Coord.setSize(new CellPosition(cols, rows));
+    public Game (int bombs, int health, int walls){
         this.health = health;
         gameField = new GameField(bombs, walls);
         cell = new Cell(CellState.CLOSED);

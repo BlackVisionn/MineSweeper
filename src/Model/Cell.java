@@ -5,7 +5,7 @@ public class Cell {
     private int closedCellsCount;
     private Cell closedCell;
     private GameField gameField;
-    private int placedFlags;
+    public static int placedFlags;
     private int remainingFlagsCount;
     private Bomb bomb;
     private Wall wall;
@@ -106,7 +106,7 @@ public class Cell {
         return closedCellsCount;
     }
 
-    CellState getCellState (CellPosition cellPos){
+    public CellState getCellState (CellPosition cellPos){
 
         if(Coord.inRange(cellPos)){
             return cellStatesMap [cellPos.x] [cellPos.y];
